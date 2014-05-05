@@ -14,17 +14,19 @@ digraph Club_Systm_Domain {
 		System[label="System"];
 		System_User[label="System_User"];
 	}
-okta-Single-Sign-On
-command line->import->club && Club_Member;
 
-	subgraph cluster_Club{
+
+	subgraph cluster_Club_Member{
 		label="Club"
 		Club[label="Club"];
 		Club_Account[label="Club_Account"]
 		Club_Manger[label="Club_Manger"];
 		Club_Member[label="Club_Member"];
 		Club_Member_Invitation[label="Club_Member_Invitation"];
+	}
 
+	subgraph cluster_Club_Budget{
+		label="Club_Budget"
 		Club_Budget[label="Club_Budget"];
 		Club_Budget_Policy[label="Club_Budget_Policy"];
 		Club_Budget_Increase_Notificiation[label="Club_Budget_Increase_Notificiation"];
@@ -32,7 +34,10 @@ command line->import->club && Club_Member;
 		Club_Budget_Total[label="Club_Budget_Total"];
 		Club_Budget_Rest[label="Club_Budget_Rest"];
 		Club_Budget_Cost[label="Club_Budget_Cost"];
+	}
 
+	subgraph cluster_Club_Activity{
+		label="Club_Activity"
 		Club_Activity[label="Club_Activity"]
 		Club_Activity_Sponsor[label="Club_Activity_Sponsor"];
 		Club_Activity_Application[label="Club_Activity_Application"];
@@ -45,28 +50,25 @@ command line->import->club && Club_Member;
 	Staff->System_User[label="As" color="yellow"];
 	System_User->System[label="Login"];
 
-	System_User->All_Club;
-	System_User->Club[label="AuthFrom"];# How Create Club,Default?And How Selectd Club?
-	Club->Club_Manger[label="AuthTo"];  #Invitation,Budget Incrase,Approve Only 
-	Club->Club_Member[label="AuthTo"];  #Club manger is sub type of club member?
+	System_User->Club[label="AuthFrom"];# How Create Club?
+	Club->Club_Manger[label="AuthTo"];# How Become Club Manger∏?
+	Club->Club_Member[label="AuthTo"];
 	Club->Club_Account[label="AuthTo"];
 
 
-	#Only Club Manger could invite
-
 	Club_Manger-> Contacts [label="Fetch"];
 	Contacts->Staff[label="Select"]
-	Club_Manger -> Club_Member_Invitation[label="Make"];
-	Club_Member_Invitation->Staff[label="EmailTo" color="red"];#Already Done?gmail
+	Club_Manger -> Club_Member_Invitation[label="Send"];
+	Club_Member_Invitation->Staff[label="EmailTo"];
 
 	Staff_Email->Staff[label="ReceviedBy" color="yellow"]
 	Staff->System[label="Accept" color="yellow"];
 
 	System->System_User[label="Sign"];
 	System_User->Club[label="NavigateByLink"];
-	Club->Club_Member_Invitation[label="ValidByLink"];
+	Club->Club_Member_Invitation[label="Valid"];
 	Club->Club_Member[label="Recruit"];
-	Club->Club_Budget[label="Trigger"];
+	Club_Member->Club_Budget[label="Trigger"];
 	Club_Budget->Club_Budget_Policy[label="Check"];
 	
 	Club_Budget_Policy->Club[label="Get_Members"];
@@ -76,8 +78,8 @@ command line->import->club && Club_Member;
 	Club_Manger->Club_Budget_Increase_Notificiation[label="CheckBy"];
 	Club_Budget_Increase_Notificiation->Club_Budget_Increase_Application[label="Apply"];
 	Club_Budget_Increase_Application->Club_Budget[label="RecordBy"];
-Club_Budget_Increase_Application->Email;
-	Club_Account->Club_Budget[label="WatchBudget"];
+
+	Club_Account->Club_Budget[label="GetBudget"];
 	Club_Budget->Club_Budget_Increase_Application[label="ListAllApplications"];
 	Club_Account->Club_Budget_Increase_Application[label="ApproveBy"];
 	Club_Budget->Club_Budget_Total[label="Increase_Budget_Total"];
