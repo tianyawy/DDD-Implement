@@ -1,23 +1,23 @@
 digraph Club_Systm_Domain {
 	
-	subgraph cluster_Office_Staff{
-		label="Office_Staff"
-		node [color="skyblue", style="filled"];
-		Staff[label="Staff"];
-		Contacts[label="Contacts"];
-		Staff_Email[label="Staff_Email"]
-	}
-
-	subgraph cluster_System_User{
-		label="System_User"
+	subgraph SSO{
+		label="SSO"
 		node [color="red", style="filled"];
-		System[label="System"];
-		System_User[label="System_User"];
+		Staff[label="Staff"];
+		Talent[label="Talent"];
 	}
-okta-Single-Sign-On
-command line->import->club && Club_Member;
 
-	subgraph cluster_Club{
+	subgraph Contacts{
+		label="Contacts"
+		node [color="skyblue", style="filled"];
+		Contact_Book[label="Contact_Book"];
+		Staff_Contact[label="Staff_Contact"]
+	}
+
+
+#command line->import->club && Club_Member;
+
+	subgraph Club{
 		label="Club"
 		Club[label="Club"];
 		Club_Account[label="Club_Account"]
@@ -42,8 +42,7 @@ command line->import->club && Club_Member;
 		Club_Activity_Player[label="Club_Activity_Player"];
 	}
 
-	Staff->System_User[label="As" color="yellow"];
-	System_User->System[label="Login"];
+	Staff->Talent[label="As" color="yellow"];
 
 	System_User->All_Club;
 	System_User->Club[label="AuthFrom"];# How Create Club,Default?And How Selectd Club?
@@ -54,11 +53,12 @@ command line->import->club && Club_Member;
 
 	#Only Club Manger could invite
 
-	Club_Manger-> Contacts [label="Fetch"];
-	Contacts->Staff[label="Select"]
+	Club_Manger-> Contact_Book [label="Fetch"];
+	Contact_Book->Contact_Staff[label="Select"]
 	Club_Manger -> Club_Member_Invitation[label="Make"];
-	Club_Member_Invitation->Staff[label="EmailTo" color="red"];#Already Done?gmail
-
+	Club_Member_Invitation->Contact_Staff[label="GetMail" color="red"];#Already Done?gmail
+Club_Member_Invitation->Staff_Email[label="EmailTo" color="yellow"]
+	
 	Staff_Email->Staff[label="ReceviedBy" color="yellow"]
 	Staff->System[label="Accept" color="yellow"];
 
