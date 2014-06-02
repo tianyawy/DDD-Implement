@@ -14,13 +14,10 @@ digraph Club_Systm_Domain {
 		System[label="System"];
 		System_User[label="System_User"];
 	}
-okta-Single-Sign-On
-command line->import->club && Club_Member;
-
 	subgraph cluster_Club{
 		label="Club"
 		Club[label="Club"];
-		Club_Account[label="Club_Account"]
+		Club_Account[label="Club_Account"];
 		Club_Manger[label="Club_Manger"];
 		Club_Member[label="Club_Member"];
 		Club_Member_Invitation[label="Club_Member_Invitation"];
@@ -33,7 +30,7 @@ command line->import->club && Club_Member;
 		Club_Budget_Rest[label="Club_Budget_Rest"];
 		Club_Budget_Cost[label="Club_Budget_Cost"];
 
-		Club_Activity[label="Club_Activity"]
+		Club_Activity[label="Club_Activity"];
 		Club_Activity_Sponsor[label="Club_Activity_Sponsor"];
 		Club_Activity_Application[label="Club_Activity_Application"];
 		Club_Activity_Policy[label="Club_Activity_Policy"];
@@ -55,11 +52,11 @@ command line->import->club && Club_Member;
 	#Only Club Manger could invite
 
 	Club_Manger-> Contacts [label="Fetch"];
-	Contacts->Staff[label="Select"]
+	Contacts->Staff[label="Select"];
 	Club_Manger -> Club_Member_Invitation[label="Make"];
 	Club_Member_Invitation->Staff[label="EmailTo" color="red"];#Already Done?gmail
 
-	Staff_Email->Staff[label="ReceviedBy" color="yellow"]
+	Staff_Email->Staff[label="ReceviedBy" color="yellow"];
 	Staff->System[label="Accept" color="yellow"];
 
 	System->System_User[label="Sign"];
@@ -76,7 +73,6 @@ command line->import->club && Club_Member;
 	Club_Manger->Club_Budget_Increase_Notificiation[label="CheckBy"];
 	Club_Budget_Increase_Notificiation->Club_Budget_Increase_Application[label="Apply"];
 	Club_Budget_Increase_Application->Club_Budget[label="RecordBy"];
-Club_Budget_Increase_Application->Email;
 	Club_Account->Club_Budget[label="WatchBudget"];
 	Club_Budget->Club_Budget_Increase_Application[label="ListAllApplications"];
 	Club_Account->Club_Budget_Increase_Application[label="ApproveBy"];
@@ -92,7 +88,7 @@ Club_Budget_Increase_Application->Email;
 	Club_Activity_Policy->Club_Budget[label="Query_Rest"];
 	Club_Budget->Club_Budget_Rest[label="Get_CurrenRest"];
 	
-	Club_Activity_Policy->Club_Activity_Application[label="Auto_Check"]；
+	Club_Activity_Policy->Club_Activity_Application[label="Auto_Check"];
 	Club_Activity_Policy->Club_Activity_Application[label="To_Manual_Check"];
 	Club_Activity_Application->Club_Activity_Approve_Notification[label="Should_Approve"];
 	Club_Activity_Approve_Notification ->Club_Manger[label="ReceviedBy"];
@@ -110,7 +106,4 @@ Club_Budget_Increase_Application->Email;
 
 	Club_Activity->Club_Budget[label="Claim"];
 	Club_Budget->Club_Budget_Cost[label="Add"];
-
-
-
 }
