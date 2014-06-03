@@ -1,0 +1,25 @@
+digraph Club_Systm_Domain{
+	label="Club";
+	node [color="skyblue", style="filled"];
+	Club_Manger[label="Club Manger"];
+	Club_Member[label="Club Member"];
+	Activity[label="Activity"];
+	Activity_Player[label="Activity Player"];
+	Activity_Requirement[label="Activity Requirement"];
+	Activity_Application[label="Activity Application"];
+
+	Club_Manger->Club_Member[label="Invite"];
+	Club_Member->Activity[label="Sponsor"];
+	Activity->Activity_Requirement[label="Should With"];
+	Activity->Activity_Application[label="Should Approve"];
+	Club_Manger->Activity_Application[label="Approve"];
+
+	
+	Club_Member->Activity[label="To Join"];
+	Activity->Activity_Player[label="Has"];
+
+}
+
+#How Club_Manger Know Activity_Application?
+#How Club_Manger Know inviting who?
+#How Club_Member Check invite;
