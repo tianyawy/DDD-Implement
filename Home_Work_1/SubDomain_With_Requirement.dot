@@ -1,0 +1,111 @@
+digraph Club_Systm_Domain {
+	
+	subgraph cluster_Office_Staff{
+		label="Office_Staff"
+		node [color="skyblue", style="filled"];
+		Staff[label="Staff"];
+		Contacts[label="Contacts"];
+		Staff_Email[label="Staff_Email"];
+	}
+
+	subgraph cluster_System_User{
+		label="System_User"
+		node [color="red", style="filled"];
+		System[label="System"];
+		System_User[label="System_User"];
+	}
+
+	subgraph cluster_Club{
+		label="Club"
+		Club[label="Club"];
+		Club_Account[label="Club_Account"];
+		Club_Manger[label="Club_Manger"];
+		Club_Member[label="Club_Member"];
+		Club_Member_Invitation[label="Club_Member_Invitation"];
+
+		Club_Budget[label="Club_Budget"];
+		Club_Budget_Policy[label="Club_Budget_Policy"];
+		Club_Budget_Increase_Notificiation[label="Club_Budget_Increase_Notificiation"];
+		Club_Budget_Increase_Application[label="Club_Budget_Increase_Application"];
+		Club_Budget_Total[label="Club_Budget_Total"];
+		Club_Budget_Rest[label="Club_Budget_Rest"];
+		Club_Budget_Cost[label="Club_Budget_Cost"];
+
+		Club_Activity[label="Club_Activity"];
+		Club_Activity_Sponsor[label="Club_Activity_Sponsor"];
+		Club_Activity_Application[label="Club_Activity_Application"];
+		Club_Activity_Policy[label="Club_Activity_Policy"];
+		Club_Activity_Approve_Notification[label="Club_Activity_Approve_Notification"];
+		Club_Activity_Invitation[label="Club_Activity_Invitation"];
+		Club_Activity_Player[label="Club_Activity_Player"];
+	}
+
+	Staff->System_User[label="As" color="yellow"];
+	System_User->System[label="Login"];
+
+	System_User->All_Club;
+	System_User->Club[label="AuthFrom"];# How Create Club,Default?And How Selectd Club?
+	Club->Club_Manger[label="AuthTo"];  #Invitation,Budget Incrase,Approve Only 
+	Club->Club_Member[label="AuthTo"];  #Club manger is sub type of club member?
+	Club->Club_Account[label="AuthTo"];
+
+
+	#Only Club Manger could invite
+
+	Club_Manger-> Contacts [label="Fetch"];
+	Contacts->Staff[label="Select"];
+	Club_Manger -> Club_Member_Invitation[label="Make"];
+	Club_Member_Invitation->Staff[label="EmailTo" color="red"];#Already Done?gmail
+
+	Staff_Email->Staff[label="ReceviedBy" color="yellow"]
+	Staff->System[label="Accept" color="yellow"];
+
+	System->System_User[label="Sign"];
+	System_User->Club[label="NavigateByLink"];
+	Club->Club_Member_Invitation[label="ValidByLink"];
+	Club->Club_Member[label="Recruit"];
+	Club->Club_Budget[label="Trigger"];
+	Club_Budget->Club_Budget_Policy[label="Check"];
+	
+	Club_Budget_Policy->Club[label="Get_Members"];
+	
+	Club_Budget_Policy->Club_Budget_Increase_Notificiation[label="Generate"];
+	Club_Budget_Increase_Notificiation->Club_Budget[label="RecordBy"];
+	Club_Manger->Club_Budget_Increase_Notificiation[label="CheckBy"];
+	Club_Budget_Increase_Notificiation->Club_Budget_Increase_Application[label="Apply"];
+	Club_Budget_Increase_Application->Club_Budget[label="RecordBy"];
+	Club_Budget_Increase_Application->Email;
+	Club_Account->Club_Budget[label="WatchBudget"];
+	Club_Budget->Club_Budget_Increase_Application[label="ListAllApplications"];
+	Club_Account->Club_Budget_Increase_Application[label="ApproveBy"];
+	Club_Budget->Club_Budget_Total[label="Increase_Budget_Total"];
+	Club_Account->Club_Budget_Increase_Application[label="Not Approve"];
+
+	Club_Member->Club_Activity_Application[label="Sponsor"];
+	Club_Activity_Application->Club_Activity_Sponsor[label="SponsoredBy"];
+	Club_Activity_Application->Club[label="LinkTo"];
+	Club->Club_Activity_Policy[label="FindBy"];
+	Club_Activity_Policy->Club_Activity_Application[label="AutoCheckTo"];
+
+	Club_Activity_Policy->Club_Budget[label="Query_Rest"];
+	Club_Budget->Club_Budget_Rest[label="Get_CurrenRest"];
+	
+	Club_Activity_Policy->Club_Activity_Application[label="Auto_Check"];
+	Club_Activity_Policy->Club_Activity_Application[label="To_Manual_Check"];
+	Club_Activity_Application->Club_Activity_Approve_Notification[label="Should_Approve"];
+	Club_Activity_Approve_Notification ->Club_Manger[label="ReceviedBy"];
+	Club_Activity_Approve_Notification->Club_Activity_Application[label="LinkTo"];
+	Club_Manger->Club_Activity_Application[label="Manual_Check_By"];
+	Club_Manger->Club_Activity_Application[label="Manual_UnCheck_By"];
+
+	Club_Activity_Application->Club_Activity[label="PassBy"];
+	Club_Activity->Club_Activity_Invitation[label="Generate_Invitations"];
+	Club_Activity_Invitation->Club_Member[label="NotifiedBy"];
+	Club_Member->Staff[label="EmailTo"];
+
+	Club_Activity_Invitation->Club_Member[label="AcceptBy"];
+	Club_Activity->Club_Activity_Player[label="PlayWith"];
+
+	Club_Activity->Club_Budget[label="Claim"];
+	Club_Budget->Club_Budget_Cost[label="Add"];
+}
